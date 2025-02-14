@@ -1,4 +1,4 @@
-module github.com/ethereum/go-ethereum
+module github.com/paxosglobal/go-ethereum-optimism
 
 go 1.22.0
 
@@ -154,3 +154,4 @@ require (
 )
 
 //replace github.com/ethereum-optimism/superchain-registry/superchain => ../superchain-registry/superchain
+
