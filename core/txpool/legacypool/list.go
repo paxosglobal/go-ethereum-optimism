@@ -20,15 +20,16 @@ import (
 	"container/heap"
 	"math"
 	"math/big"
+	"slices"
 	"sort"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/txpool"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/holiman/uint256"
-	"golang.org/x/exp/slices"
 )
 
 // nonceHeap is a heap.Interface implementation over 64bit unsigned integers for
@@ -265,6 +266,15 @@ func (m *sortedMap) LastElement() *types.Transaction {
 	return cache[len(cache)-1]
 }
 
+// FirstElement returns the first element from the heap (guaranteed to be lowest), thus, the
+// transaction with the lowest nonce. Returns nil if there are no elements.
+func (m *sortedMap) FirstElement() *types.Transaction {
+	if m.Len() == 0 {
+		return nil
+	}
+	return m.Get((*m.index)[0])
+}
+
 // list is a "list" of transactions belonging to an account, sorted by account
 // nonce. The same type can be used both for storing contiguous transactions for
 // the executable/pending queue; and for storing gapped transactions for the non-
@@ -300,7 +310,7 @@ func (l *list) Contains(nonce uint64) bool {
 //
 // If the new transaction is accepted into the list, the lists' cost and gas
 // thresholds are also potentially updated.
-func (l *list) Add(tx *types.Transaction, priceBump uint64) (bool, *types.Transaction) {
+func (l *list) Add(tx *types.Transaction, priceBump uint64, l1CostFn txpool.L1CostFunc) (bool, *types.Transaction) {
 	// If there's an older better transaction, abort
 	old := l.txs.Get(tx.Nonce())
 	if old != nil {
@@ -332,7 +342,11 @@ func (l *list) Add(tx *types.Transaction, priceBump uint64) (bool, *types.Transa
 		return false, nil
 	}
 	l.totalcost.Add(l.totalcost, cost)
-
+	if l1CostFn != nil {
+		if l1Cost := l1CostFn(tx.RollupCostData()); l1Cost != nil { // add rollup cost
+			l.totalcost.Add(l.totalcost, cost)
+		}
+	}
 	// Otherwise overwrite the old transaction with the current one
 	l.txs.Put(tx)
 	if l.costcap.Cmp(cost) < 0 {

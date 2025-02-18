@@ -22,13 +22,14 @@ import (
 	"fmt"
 	"math/big"
 	"os"
-	"path"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/eth"
 	"github.com/ethereum/go-ethereum/internal/era"
 	"github.com/ethereum/go-ethereum/internal/ethapi"
 	"github.com/ethereum/go-ethereum/internal/flags"
@@ -122,7 +123,11 @@ func block(ctx *cli.Context) error {
 		return fmt.Errorf("error reading block %d: %w", num, err)
 	}
 	// Convert block to JSON and print.
-	val := ethapi.RPCMarshalBlock(block, ctx.Bool(txsFlag.Name), ctx.Bool(txsFlag.Name), params.MainnetChainConfig)
+	// TODO: without a proper Eth API Backend, this tool isn't expected to function correctly
+	val, err := ethapi.RPCMarshalBlock(ctx.Context, block, ctx.Bool(txsFlag.Name), ctx.Bool(txsFlag.Name), params.MainnetChainConfig, &eth.EthAPIBackend{})
+	if err != nil {
+		return fmt.Errorf("error marshaling block: %w", err)
+	}
 	b, err := json.MarshalIndent(val, "", "  ")
 	if err != nil {
 		return fmt.Errorf("error marshaling json: %w", err)
@@ -176,7 +181,7 @@ func open(ctx *cli.Context, epoch uint64) (*era.Era, error) {
 	if epoch >= uint64(len(entries)) {
 		return nil, fmt.Errorf("epoch out-of-bounds: last %d, want %d", len(entries)-1, epoch)
 	}
-	return era.Open(path.Join(dir, entries[epoch]))
+	return era.Open(filepath.Join(dir, entries[epoch]))
 }
 
 // verify checks each era1 file in a directory to ensure it is well-formed and
@@ -212,7 +217,7 @@ func verify(ctx *cli.Context) error {
 		// Wrap in function so defers don't stack.
 		err := func() error {
 			name := entries[i]
-			e, err := era.Open(path.Join(dir, name))
+			e, err := era.Open(filepath.Join(dir, name))
 			if err != nil {
 				return fmt.Errorf("error opening era1 file %s: %w", name, err)
 			}

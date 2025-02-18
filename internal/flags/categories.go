@@ -20,7 +20,7 @@ import "github.com/urfave/cli/v2"
 
 const (
 	EthCategory        = "ETHEREUM"
-	LightCategory      = "LIGHT CLIENT"
+	BeaconCategory     = "BEACON CHAIN"
 	DevCategory        = "DEVELOPER CHAIN"
 	StateCategory      = "STATE HISTORY MANAGEMENT"
 	TxPoolCategory     = "TRANSACTION POOL (EVM)"
@@ -32,6 +32,7 @@ const (
 	MinerCategory      = "MINER"
 	GasPriceCategory   = "GAS PRICE ORACLE"
 	VMCategory         = "VIRTUAL MACHINE"
+	RollupCategory     = "ROLLUP NODE"
 	LoggingCategory    = "LOGGING AND DEBUGGING"
 	MetricsCategory    = "METRICS AND STATS"
 	MiscCategory       = "MISC"

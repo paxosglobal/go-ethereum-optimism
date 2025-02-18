@@ -33,8 +33,9 @@ import (
 )
 
 const (
-	defaultBodyLimit = 5 * 1024 * 1024
-	contentType      = "application/json"
+	maxRequestContentLength = 1024 * 1024 * 32
+	defaultBodyLimit        = 5 * 1024 * 1024
+	contentType             = "application/json"
 )
 
 // https://www.jsonrpc.org/historical/json-rpc-over-http.html#id13
@@ -236,7 +237,7 @@ func (hc *httpConn) doRequest(ctx context.Context, msg interface{}) (io.ReadClos
 		if _, err := buf.ReadFrom(resp.Body); err == nil {
 			body = buf.Bytes()
 		}
-
+		resp.Body.Close()
 		return nil, HTTPError{
 			Status:     resp.Status,
 			StatusCode: resp.StatusCode,

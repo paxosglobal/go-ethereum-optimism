@@ -17,6 +17,7 @@
 package simulated
 
 import (
+	"errors"
 	"time"
 
 	"github.com/ethereum/go-ethereum"
@@ -25,7 +26,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/eth"
 	"github.com/ethereum/go-ethereum/eth/catalyst"
-	"github.com/ethereum/go-ethereum/eth/downloader"
 	"github.com/ethereum/go-ethereum/eth/ethconfig"
 	"github.com/ethereum/go-ethereum/eth/filters"
 	"github.com/ethereum/go-ethereum/ethclient"
@@ -62,7 +62,7 @@ type simClient struct {
 // Backend is a simulated blockchain. You can use it to test your contracts or
 // other code that interacts with the Ethereum chain.
 type Backend struct {
-	eth    *eth.Ethereum
+	node   *node.Node
 	beacon *catalyst.SimulatedBeacon
 	client simClient
 }
@@ -84,7 +84,7 @@ func NewBackend(alloc types.GenesisAlloc, options ...func(nodeConf *node.Config,
 		GasLimit: ethconfig.Defaults.Miner.GasCeil,
 		Alloc:    alloc,
 	}
-	ethConf.SyncMode = downloader.FullSync
+	ethConf.SyncMode = ethconfig.FullSync
 	ethConf.TxPool.NoLocals = true
 
 	for _, option := range options {
@@ -102,6 +102,27 @@ func NewBackend(alloc types.GenesisAlloc, options ...func(nodeConf *node.Config,
 	return sim
 }
 
+func NewBackendFromConfig(conf ethconfig.Config) *Backend {
+	// Setup the node object
+	nodeConf := node.DefaultConfig
+	nodeConf.DataDir = ""
+	nodeConf.P2P = p2p.Config{NoDiscovery: true}
+	stack, err := node.New(&nodeConf)
+	if err != nil {
+		// This should never happen, if it does, please open an issue
+		panic(err)
+	}
+
+	conf.SyncMode = ethconfig.FullSync
+	conf.TxPool.NoLocals = true
+	sim, err := newWithNode(stack, &conf, 0)
+	if err != nil {
+		// This should never happen, if it does, please open an issue
+		panic(err)
+	}
+	return sim
+}
+
 // newWithNode sets up a simulated backend on an existing node. The provided node
 // must not be started and will be started by this method.
 func newWithNode(stack *node.Node, conf *eth.Config, blockPeriod uint64) (*Backend, error) {
@@ -113,7 +134,7 @@ func newWithNode(stack *node.Node, conf *eth.Config, blockPeriod uint64) (*Backe
 	filterSystem := filters.NewFilterSystem(backend.APIBackend, filters.Config{})
 	stack.RegisterAPIs([]rpc.API{{
 		Namespace: "eth",
-		Service:   filters.NewFilterAPI(filterSystem, false),
+		Service:   filters.NewFilterAPI(filterSystem),
 	}})
 	// Start the node
 	if err := stack.Start(); err != nil {
@@ -129,7 +150,7 @@ func newWithNode(stack *node.Node, conf *eth.Config, blockPeriod uint64) (*Backe
 		return nil, err
 	}
 	return &Backend{
-		eth:    backend,
+		node:   stack,
 		beacon: beacon,
 		client: simClient{ethclient.NewClient(stack.Attach())},
 	}, nil
@@ -142,12 +163,16 @@ func (n *Backend) Close() error {
 		n.client.Close()
 		n.client = simClient{}
 	}
+	var err error
 	if n.beacon != nil {
-		err := n.beacon.Stop()
+		err = n.beacon.Stop()
 		n.beacon = nil
-		return err
 	}
-	return nil
+	if n.node != nil {
+		err = errors.Join(err, n.node.Close())
+		n.node = nil
+	}
+	return err
 }
 
 // Commit seals a block and moves the chain forward to a new empty block.

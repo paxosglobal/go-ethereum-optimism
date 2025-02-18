@@ -47,9 +47,9 @@ type BlobTx struct {
 	Sidecar *BlobTxSidecar `rlp:"-"`
 
 	// Signature values
-	V *uint256.Int `json:"v" gencodec:"required"`
-	R *uint256.Int `json:"r" gencodec:"required"`
-	S *uint256.Int `json:"s" gencodec:"required"`
+	V *uint256.Int
+	R *uint256.Int
+	S *uint256.Int
 }
 
 // BlobTxSidecar contains the blobs of a blob transaction.
@@ -162,6 +162,7 @@ func (tx *BlobTx) value() *big.Int        { return tx.Value.ToBig() }
 func (tx *BlobTx) nonce() uint64          { return tx.Nonce }
 func (tx *BlobTx) to() *common.Address    { tmp := tx.To; return &tmp }
 func (tx *BlobTx) blobGas() uint64        { return params.BlobTxBlobGasPerBlob * uint64(len(tx.BlobHashes)) }
+func (tx *BlobTx) isSystemTx() bool       { return false }
 
 func (tx *BlobTx) effectiveGasPrice(dst *big.Int, baseFee *big.Int) *big.Int {
 	if baseFee == nil {
@@ -188,6 +189,12 @@ func (tx *BlobTx) setSignatureValues(chainID, v, r, s *big.Int) {
 func (tx *BlobTx) withoutSidecar() *BlobTx {
 	cpy := *tx
 	cpy.Sidecar = nil
+	return &cpy
+}
+
+func (tx *BlobTx) withSidecar(sideCar *BlobTxSidecar) *BlobTx {
+	cpy := *tx
+	cpy.Sidecar = sideCar
 	return &cpy
 }
 

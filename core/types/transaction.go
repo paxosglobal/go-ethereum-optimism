@@ -26,8 +26,8 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-ethereum/rlp"
 )
 
@@ -49,6 +49,7 @@ const (
 	AccessListTxType = 0x01
 	DynamicFeeTxType = 0x02
 	BlobTxType       = 0x03
+	SetCodeTxType    = 0x04
 )
 
 // Transaction is an Ethereum transaction.
@@ -57,9 +58,18 @@ type Transaction struct {
 	time  time.Time // Time first seen locally (spam avoidance)
 
 	// caches
-	hash atomic.Value
-	size atomic.Value
-	from atomic.Value
+	hash atomic.Pointer[common.Hash]
+	size atomic.Uint64
+	from atomic.Pointer[sigCache]
+
+	// cache of details to compute the data availability fee
+	rollupCostData atomic.Value
+
+	// optional preconditions for inclusion
+	conditional atomic.Pointer[TransactionConditional]
+
+	// an indicator if this transaction is rejected during block building
+	rejected atomic.Bool
 }
 
 // NewTx creates a new transaction.
@@ -86,6 +96,7 @@ type TxData interface {
 	value() *big.Int
 	nonce() uint64
 	to() *common.Address
+	isSystemTx() bool
 
 	rawSignatureValues() (v, r, s *big.Int)
 	setSignatureValues(chainID, v, r, s *big.Int)
@@ -206,6 +217,10 @@ func (tx *Transaction) decodeTyped(b []byte) (TxData, error) {
 		inner = new(DynamicFeeTx)
 	case BlobTxType:
 		inner = new(BlobTx)
+	case SetCodeTxType:
+		inner = new(SetCodeTx)
+	case DepositTxType:
+		inner = new(DepositTx)
 	default:
 		return nil, ErrTxTypeNotSupported
 	}
@@ -303,10 +318,60 @@ func (tx *Transaction) Value() *big.Int { return new(big.Int).Set(tx.inner.value
 // Nonce returns the sender account nonce of the transaction.
 func (tx *Transaction) Nonce() uint64 { return tx.inner.nonce() }
 
+// EffectiveNonce returns the nonce that was actually used as part of transaction execution
+// Returns nil if the effective nonce is not known
+func (tx *Transaction) EffectiveNonce() *uint64 {
+	type txWithEffectiveNonce interface {
+		effectiveNonce() *uint64
+	}
+
+	if itx, ok := tx.inner.(txWithEffectiveNonce); ok {
+		return itx.effectiveNonce()
+	}
+	nonce := tx.inner.nonce()
+	return &nonce
+}
+
 // To returns the recipient address of the transaction.
 // For contract-creation transactions, To returns nil.
 func (tx *Transaction) To() *common.Address {
 	return copyAddressPtr(tx.inner.to())
+}
+
+// SourceHash returns the hash that uniquely identifies the source of the deposit tx,
+// e.g. a user deposit event, or a L1 info deposit included in a specific L2 block height.
+// Non-deposit transactions return a zeroed hash.
+func (tx *Transaction) SourceHash() common.Hash {
+	switch tx.inner.(type) {
+	case *DepositTx:
+		return tx.inner.(*DepositTx).SourceHash
+	case *depositTxWithNonce:
+		return tx.inner.(*depositTxWithNonce).SourceHash
+	}
+	return common.Hash{}
+}
+
+// Mint returns the ETH to mint in the deposit tx.
+// This returns nil if there is nothing to mint, or if this is not a deposit tx.
+func (tx *Transaction) Mint() *big.Int {
+	switch tx.inner.(type) {
+	case *DepositTx:
+		return tx.inner.(*DepositTx).Mint
+	case *depositTxWithNonce:
+		return tx.inner.(*depositTxWithNonce).Mint
+	}
+	return nil
+}
+
+// IsDepositTx returns true if the transaction is a deposit tx type.
+func (tx *Transaction) IsDepositTx() bool {
+	return tx.Type() == DepositTxType
+}
+
+// IsSystemTx returns true for deposits that are system transactions. These transactions
+// are executed in an unmetered environment & do not contribute to the block gas limit.
+func (tx *Transaction) IsSystemTx() bool {
+	return tx.inner.isSystemTx()
 }
 
 // Cost returns (gas * gasPrice) + (blobGas * blobGasPrice) + value.
@@ -317,6 +382,43 @@ func (tx *Transaction) Cost() *big.Int {
 	}
 	total.Add(total, tx.Value())
 	return total
+}
+
+// RollupCostData caches the information needed to efficiently compute the data availability fee
+func (tx *Transaction) RollupCostData() RollupCostData {
+	if tx.Type() == DepositTxType {
+		return RollupCostData{}
+	}
+	if v := tx.rollupCostData.Load(); v != nil {
+		return v.(RollupCostData)
+	}
+	data, err := tx.MarshalBinary()
+	if err != nil { // Silent error, invalid txs will not be marshalled/unmarshalled for batch submission anyway.
+		log.Error("failed to encode tx for L1 cost computation", "err", err)
+	}
+	out := NewRollupCostData(data)
+	tx.rollupCostData.Store(out)
+	return out
+}
+
+// Conditional returns the conditional attached to the transaction
+func (tx *Transaction) Conditional() *TransactionConditional {
+	return tx.conditional.Load()
+}
+
+// SetConditional attaches a conditional to the transaction
+func (tx *Transaction) SetConditional(cond *TransactionConditional) {
+	tx.conditional.Store(cond)
+}
+
+// Rejected will mark this transaction as rejected.
+func (tx *Transaction) SetRejected() {
+	tx.rejected.Store(true)
+}
+
+// Rejected returns the rejected status of this tx
+func (tx *Transaction) Rejected() bool {
+	return tx.rejected.Load()
 }
 
 // RawSignatureValues returns the V, R, S signature values of the transaction.
@@ -350,15 +452,24 @@ func (tx *Transaction) GasTipCapIntCmp(other *big.Int) int {
 // Note: if the effective gasTipCap is negative, this method returns both error
 // the actual negative value, _and_ ErrGasFeeCapTooLow
 func (tx *Transaction) EffectiveGasTip(baseFee *big.Int) (*big.Int, error) {
+	if tx.Type() == DepositTxType {
+		return new(big.Int), nil
+	}
 	if baseFee == nil {
 		return tx.GasTipCap(), nil
 	}
 	var err error
 	gasFeeCap := tx.GasFeeCap()
-	if gasFeeCap.Cmp(baseFee) == -1 {
+	if gasFeeCap.Cmp(baseFee) < 0 {
 		err = ErrGasFeeCapTooLow
 	}
-	return math.BigMin(tx.GasTipCap(), gasFeeCap.Sub(gasFeeCap, baseFee)), err
+	gasFeeCap = gasFeeCap.Sub(gasFeeCap, baseFee)
+
+	gasTipCap := tx.GasTipCap()
+	if gasTipCap.Cmp(gasFeeCap) < 0 {
+		return gasTipCap, err
+	}
+	return gasFeeCap, err
 }
 
 // EffectiveGasTipValue is identical to EffectiveGasTip, but does not return an
@@ -416,6 +527,18 @@ func (tx *Transaction) BlobTxSidecar() *BlobTxSidecar {
 	return nil
 }
 
+// SetBlobTxSidecar sets the sidecar of a transaction.
+// The sidecar should match the blob-tx versioned hashes, or the transaction will be invalid.
+// This allows tools to easily re-attach blob sidecars to signed transactions that omit the sidecar.
+func (tx *Transaction) SetBlobTxSidecar(sidecar *BlobTxSidecar) error {
+	blobtx, ok := tx.inner.(*BlobTx)
+	if !ok {
+		return fmt.Errorf("not a blob tx, type = %d", tx.Type())
+	}
+	blobtx.Sidecar = sidecar
+	return nil
+}
+
 // BlobGasFeeCapCmp compares the blob fee cap of two transactions.
 func (tx *Transaction) BlobGasFeeCapCmp(other *Transaction) int {
 	return tx.BlobGasFeeCap().Cmp(other.BlobGasFeeCap())
@@ -446,9 +569,38 @@ func (tx *Transaction) WithoutBlobTxSidecar() *Transaction {
 	return cpy
 }
 
-// SetTime sets the decoding time of a transaction. This is used by tests to set
-// arbitrary times and by persistent transaction pools when loading old txs from
-// disk.
+// WithBlobTxSidecar returns a copy of tx with the blob sidecar added.
+func (tx *Transaction) WithBlobTxSidecar(sideCar *BlobTxSidecar) *Transaction {
+	blobtx, ok := tx.inner.(*BlobTx)
+	if !ok {
+		return tx
+	}
+	cpy := &Transaction{
+		inner: blobtx.withSidecar(sideCar),
+		time:  tx.time,
+	}
+	// Note: tx.size cache not carried over because the sidecar is included in size!
+	if h := tx.hash.Load(); h != nil {
+		cpy.hash.Store(h)
+	}
+	if f := tx.from.Load(); f != nil {
+		cpy.from.Store(f)
+	}
+	return cpy
+}
+
+// SetCodeAuthorizations returns the authorizations list of the transaction.
+func (tx *Transaction) SetCodeAuthorizations() []SetCodeAuthorization {
+	setcodetx, ok := tx.inner.(*SetCodeTx)
+	if !ok {
+		return nil
+	}
+	return setcodetx.AuthList
+}
+
+// SetTime sets the decoding time of a transaction. Used by the sequencer API to
+// determine mempool time spent by conditional txs and by tests to set arbitrary
+// times and by persistent transaction pools when loading old txs from disk.
 func (tx *Transaction) SetTime(t time.Time) {
 	tx.time = t
 }
@@ -462,7 +614,7 @@ func (tx *Transaction) Time() time.Time {
 // Hash returns the transaction hash.
 func (tx *Transaction) Hash() common.Hash {
 	if hash := tx.hash.Load(); hash != nil {
-		return hash.(common.Hash)
+		return *hash
 	}
 
 	var h common.Hash
@@ -471,15 +623,15 @@ func (tx *Transaction) Hash() common.Hash {
 	} else {
 		h = prefixedRlpHash(tx.Type(), tx.inner)
 	}
-	tx.hash.Store(h)
+	tx.hash.Store(&h)
 	return h
 }
 
 // Size returns the true encoded storage size of the transaction, either by encoding
 // and returning it, or returning a previously cached value.
 func (tx *Transaction) Size() uint64 {
-	if size := tx.size.Load(); size != nil {
-		return size.(uint64)
+	if size := tx.size.Load(); size > 0 {
+		return size
 	}
 
 	// Cache miss, encode and cache.
@@ -536,11 +688,11 @@ func (s Transactions) EncodeIndex(i int, w *bytes.Buffer) {
 	}
 }
 
-// TxDifference returns a new set which is the difference between a and b.
+// TxDifference returns a new set of transactions that are present in a but not in b.
 func TxDifference(a, b Transactions) Transactions {
 	keep := make(Transactions, 0, len(a))
 
-	remove := make(map[common.Hash]struct{})
+	remove := make(map[common.Hash]struct{}, b.Len())
 	for _, tx := range b {
 		remove[tx.Hash()] = struct{}{}
 	}
@@ -554,7 +706,7 @@ func TxDifference(a, b Transactions) Transactions {
 	return keep
 }
 
-// HashDifference returns a new set which is the difference between a and b.
+// HashDifference returns a new set of hashes that are present in a but not in b.
 func HashDifference(a, b []common.Hash) []common.Hash {
 	keep := make([]common.Hash, 0, len(a))
 
