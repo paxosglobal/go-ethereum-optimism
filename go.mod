@@ -1,4 +1,4 @@
-module github.com/paxosglobal/optimism
+module github.com/paxosglobal/go-ethereum-optimism
 
 go 1.20
 
