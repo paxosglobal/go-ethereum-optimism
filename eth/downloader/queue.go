@@ -190,7 +190,7 @@ func (q *queue) Reset(blockCacheLimit int, thresholdInitialSize int) {
 	defer q.lock.Unlock()
 
 	q.closed = false
-	q.mode = FullSync
+	q.mode = ethconfig.FullSync
 
 	q.headerHead = common.Hash{}
 	q.headerPendPool = make(map[string]*fetchRequest)
@@ -338,7 +338,7 @@ func (q *queue) Schedule(headers []*types.Header, hashes []common.Hash, from uin
 			q.blockTaskQueue.Push(header, -int64(header.Number.Uint64()))
 		}
 		// Queue for receipt retrieval
-		if q.mode == SnapSync && !header.EmptyReceipts() {
+		if q.mode == ethconfig.SnapSync && !header.EmptyReceipts() {
 			if _, ok := q.receiptTaskPool[hash]; ok {
 				log.Warn("Header already scheduled for receipt fetch", "number", header.Number, "hash", hash)
 			} else {
@@ -533,7 +533,7 @@ func (q *queue) reserveHeaders(p *peerConnection, count int, taskPool map[common
 		// we can ask the resultcache if this header is within the
 		// "prioritized" segment of blocks. If it is not, we need to throttle
 
-		stale, throttle, item, err := q.resultCache.AddFetch(header, q.mode == SnapSync)
+		stale, throttle, item, err := q.resultCache.AddFetch(header, q.mode == ethconfig.SnapSync)
 		if stale {
 			// Don't put back in the task queue, this item has already been
 			// delivered upstream
@@ -897,7 +897,7 @@ func (q *queue) DeliverReceipts(id string, receiptList [][]*types.Receipt, recei
 // to access the queue, so they already need a lock anyway.
 func (q *queue) deliver(id string, taskPool map[common.Hash]*types.Header,
 	taskQueue *prque.Prque[int64, *types.Header], pendPool map[string]*fetchRequest,
-	reqTimer metrics.Timer, resInMeter metrics.Meter, resDropMeter metrics.Meter,
+	reqTimer *metrics.Timer, resInMeter, resDropMeter *metrics.Meter,
 	results int, validate func(index int, header *types.Header) error,
 	reconstruct func(index int, result *fetchResult)) (int, error) {
 	// Short circuit if the data was never requested

@@ -72,6 +72,7 @@ var (
 		utils.OverrideOptimismGranite,
 		utils.OverrideOptimismHolocene,
 		utils.OverrideOptimismInterop,
+		utils.OverrideOptimismIsthmus,
 		utils.EnablePersonal, // deprecated
 		utils.TxPoolLocalsFlag,
 		utils.TxPoolNoLocalsFlag,
@@ -162,6 +163,7 @@ var (
 		utils.RollupInteropRPCFlag,
 		utils.RollupInteropMempoolFilteringFlag,
 		utils.RollupDisableTxPoolGossipFlag,
+		utils.RollupEnableTxPoolAdmissionFlag,
 		utils.RollupComputePendingBlock,
 		utils.RollupHaltOnIncompatibleProtocolVersionFlag,
 		utils.RollupSuperchainUpgradesFlag,
@@ -356,12 +358,6 @@ func prepare(ctx *cli.Context) {
 			ctx.Set(utils.CacheFlag.Name, strconv.Itoa(4096))
 		}
 	}
-
-	// Start metrics export if enabled
-	utils.SetupMetrics(ctx)
-
-	// Start system runtime metrics collection
-	go metrics.CollectProcessMetrics(3 * time.Second)
 }
 
 // geth is the main entry point into the system if no special subcommand is run.

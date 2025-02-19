@@ -109,7 +109,7 @@ func testForkIDSplit(t *testing.T, protocol uint) {
 			Chain:      chainNoFork,
 			TxPool:     newTestTxPool(),
 			Network:    1,
-			Sync:       downloader.FullSync,
+			Sync:       ethconfig.FullSync,
 			BloomCache: 1,
 		})
 		ethProFork, _ = newHandler(&handlerConfig{
@@ -117,7 +117,7 @@ func testForkIDSplit(t *testing.T, protocol uint) {
 			Chain:      chainProFork,
 			TxPool:     newTestTxPool(),
 			Network:    1,
-			Sync:       downloader.FullSync,
+			Sync:       ethconfig.FullSync,
 			BloomCache: 1,
 		})
 	)

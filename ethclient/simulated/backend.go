@@ -85,7 +85,7 @@ func NewBackend(alloc types.GenesisAlloc, options ...func(nodeConf *node.Config,
 		GasLimit: ethconfig.Defaults.Miner.GasCeil,
 		Alloc:    alloc,
 	}
-	ethConf.SyncMode = downloader.FullSync
+	ethConf.SyncMode = ethconfig.FullSync
 	ethConf.TxPool.NoLocals = true
 
 	for _, option := range options {
@@ -114,7 +114,7 @@ func NewBackendFromConfig(conf ethconfig.Config) *Backend {
 		panic(err)
 	}
 
-	conf.SyncMode = downloader.FullSync
+	conf.SyncMode = ethconfig.FullSync
 	conf.TxPool.NoLocals = true
 	sim, err := newWithNode(stack, &conf, 0)
 	if err != nil {

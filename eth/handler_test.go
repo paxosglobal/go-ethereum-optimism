@@ -164,7 +164,7 @@ func newTestHandlerWithBlocks(blocks int) *testHandler {
 		Chain:      chain,
 		TxPool:     txpool,
 		Network:    1,
-		Sync:       downloader.SnapSync,
+		Sync:       ethconfig.SnapSync,
 		BloomCache: 1,
 	})
 	handler.Start(1000)

@@ -234,10 +234,6 @@ compile_fuzzer github.com/paxosglobal/go-ethereum-optimism/tests/fuzzers/secp256
 
 compile_fuzzer github.com/paxosglobal/go-ethereum-optimism/eth/protocols/eth \
   FuzzEthProtocolHandlers fuzz_eth_protocol_handlers \
-  $repo/eth/protocols/eth/handler_test.go
+  $repo/eth/protocols/eth/handler_test.go,$repo/eth/protocols/eth/peer_test.go
 
-
-#compile_fuzzer tests/fuzzers/vflux      FuzzClientPool fuzzClientPool
-#compile_fuzzer tests/fuzzers/difficulty Fuzz fuzzDifficulty
-#compile_fuzzer tests/fuzzers/les        Fuzz fuzzLes
 

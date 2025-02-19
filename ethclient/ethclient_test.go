@@ -84,7 +84,7 @@ var genesis = &core.Genesis{
 
 var genesisForHistorical = &core.Genesis{
 	Config:    params.OptimismTestConfig,
-	Alloc:     core.GenesisAlloc{testAddr: {Balance: testBalance}},
+	Alloc:     types.GenesisAlloc{testAddr: {Balance: testBalance}},
 	ExtraData: []byte("test genesis"),
 	Timestamp: 9000,
 	BaseFee:   big.NewInt(params.InitialBaseFee),
@@ -115,7 +115,7 @@ var testTx2 = types.MustSignNewTx(testKey, types.LatestSigner(genesis.Config), &
 
 type mockHistoricalBackend struct{}
 
-func (m *mockHistoricalBackend) Call(ctx context.Context, args ethapi.TransactionArgs, blockNrOrHash rpc.BlockNumberOrHash, overrides *ethapi.StateOverride) (hexutil.Bytes, error) {
+func (m *mockHistoricalBackend) Call(ctx context.Context, args ethapi.TransactionArgs, blockNrOrHash rpc.BlockNumberOrHash, overrides *override.StateOverride) (hexutil.Bytes, error) {
 	num, ok := blockNrOrHash.Number()
 	if ok && num == 1 {
 		return hexutil.Bytes("test"), nil
@@ -199,7 +199,6 @@ func newTestBackend(t *testing.T, config *node.Config, enableHistoricalState boo
 		ecfg.RollupHistoricalRPCTimeout = time.Second * 5
 	}
 	ethservice, err := eth.New(n, ecfg)
-
 	if err != nil {
 		return nil, nil, fmt.Errorf("can't create new ethereum service: %v", err)
 	}
