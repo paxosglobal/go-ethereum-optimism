@@ -53,10 +53,10 @@ import (
 	"time"
 
 	"github.com/cespare/cp"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto/signify"
-	"github.com/ethereum/go-ethereum/internal/build"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/signify"
+	"github.com/paxosglobal/go-ethereum-optimism/internal/build"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 var (
@@ -245,11 +245,11 @@ func doInstall(cmdline []string) {
 func buildFlags(env build.Environment, staticLinking bool, buildTags []string) (flags []string) {
 	var ld []string
 	if env.Commit != "" {
-		ld = append(ld, "-X", "github.com/ethereum/go-ethereum/internal/version.gitCommit="+env.Commit)
-		ld = append(ld, "-X", "github.com/ethereum/go-ethereum/internal/version.gitDate="+env.Date)
+		ld = append(ld, "-X", "github.com/paxosglobal/go-ethereum-optimism/internal/version.gitCommit="+env.Commit)
+		ld = append(ld, "-X", "github.com/paxosglobal/go-ethereum-optimism/internal/version.gitDate="+env.Date)
 	}
 	if env.Tag != "" {
-		ld = append(ld, "-X", "github.com/ethereum/go-ethereum/params.gitTag="+env.Tag)
+		ld = append(ld, "-X", "github.com/paxosglobal/go-ethereum-optimism/params.gitTag="+env.Tag)
 	}
 	// Strip DWARF on darwin. This used to be required for certain things,
 	// and there is no downside to this, so we just keep doing it.

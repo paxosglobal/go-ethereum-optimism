@@ -22,10 +22,10 @@ import (
 	"math/big"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/eth/protocols/eth"
-	"github.com/ethereum/go-ethereum/eth/protocols/snap"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/protocols/eth"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/protocols/snap"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p"
 )
 
 var (

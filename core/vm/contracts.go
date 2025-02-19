@@ -23,14 +23,14 @@ import (
 	"fmt"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/blake2b"
-	"github.com/ethereum/go-ethereum/crypto/bls12381"
-	"github.com/ethereum/go-ethereum/crypto/bn256"
-	"github.com/ethereum/go-ethereum/crypto/kzg4844"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common/math"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/blake2b"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/bls12381"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/bn256"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/kzg4844"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 	"golang.org/x/crypto/ripemd160"
 )
 
