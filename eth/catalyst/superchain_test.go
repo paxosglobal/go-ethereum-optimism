@@ -4,9 +4,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/downloader"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/ethconfig"
+	"github.com/paxosglobal/go-ethereum-optimism/node"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 func TestSignalSuperchainV1(t *testing.T) {

@@ -10,6 +10,8 @@ import (
 	"runtime/metrics"
 	"runtime/pprof"
 	"time"
+
+	"github.com/paxosglobal/go-ethereum-optimism/log"
 )
 
 var (
