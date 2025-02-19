@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/event"
+	"github.com/paxosglobal/go-ethereum-optimism/event"
 )
 
 // This example demonstrates how SubscriptionScope can be used to control the lifetime of

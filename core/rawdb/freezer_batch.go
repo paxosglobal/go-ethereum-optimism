@@ -19,9 +19,9 @@ package rawdb
 import (
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common/math"
-	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/golang/snappy"
+	"github.com/paxosglobal/go-ethereum-optimism/common/math"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
 )
 
 // This is the maximum amount of data that will be buffered in memory

@@ -25,13 +25,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/discover"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/nat"
-	"github.com/ethereum/go-ethereum/p2p/netutil"
+	"github.com/paxosglobal/go-ethereum-optimism/cmd/utils"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/discover"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/enode"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/nat"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/netutil"
 )
 
 func main() {

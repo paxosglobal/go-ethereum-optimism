@@ -22,8 +22,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/internal/version"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/internal/version"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 	"github.com/urfave/cli/v2"
 )
 

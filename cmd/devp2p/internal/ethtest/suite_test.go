@@ -24,14 +24,14 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/eth"
-	"github.com/ethereum/go-ethereum/eth/catalyst"
-	"github.com/ethereum/go-ethereum/eth/ethconfig"
-	"github.com/ethereum/go-ethereum/internal/utesting"
-	"github.com/ethereum/go-ethereum/node"
-	"github.com/ethereum/go-ethereum/p2p"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common/hexutil"
+	"github.com/paxosglobal/go-ethereum-optimism/eth"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/catalyst"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/ethconfig"
+	"github.com/paxosglobal/go-ethereum-optimism/internal/utesting"
+	"github.com/paxosglobal/go-ethereum-optimism/node"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p"
 )
 
 func makeJWTSecret() (string, [32]byte, error) {

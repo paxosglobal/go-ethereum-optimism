@@ -29,10 +29,10 @@ import (
 	"testing"
 
 	"github.com/davecgh/go-spew/spew"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/crypto/ecies"
-	"github.com/ethereum/go-ethereum/p2p/simulations/pipes"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/ecies"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/simulations/pipes"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
 	"github.com/stretchr/testify/assert"
 )
 
