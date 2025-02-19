@@ -21,10 +21,10 @@ import (
 	"math"
 	"sort"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/params"
 	"github.com/holiman/uint256"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/tracing"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 var activators = map[int]func(*JumpTable){

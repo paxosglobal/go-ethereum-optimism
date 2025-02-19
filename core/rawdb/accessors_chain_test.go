@@ -27,11 +27,11 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/crypto/sha3"
 )

@@ -22,7 +22,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
 )
 
 type accessList struct {

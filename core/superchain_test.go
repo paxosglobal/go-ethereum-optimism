@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/superchain"
-	"github.com/ethereum/go-ethereum/triedb"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
+	"github.com/paxosglobal/go-ethereum-optimism/superchain"
+	"github.com/paxosglobal/go-ethereum-optimism/triedb"
 )
 
 func TestOPStackGenesis(t *testing.T) {

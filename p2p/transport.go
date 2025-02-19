@@ -26,11 +26,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/bitutil"
-	"github.com/ethereum/go-ethereum/metrics"
-	"github.com/ethereum/go-ethereum/p2p/rlpx"
-	"github.com/ethereum/go-ethereum/rlp"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common/bitutil"
+	"github.com/paxosglobal/go-ethereum-optimism/metrics"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/rlpx"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
 )
 
 const (

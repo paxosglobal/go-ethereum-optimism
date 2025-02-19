@@ -23,14 +23,14 @@ import (
 	"os"
 	"slices"
 
-	"github.com/ethereum/go-ethereum/cmd/evm/internal/t8ntool"
-	"github.com/ethereum/go-ethereum/internal/debug"
-	"github.com/ethereum/go-ethereum/internal/flags"
+	"github.com/paxosglobal/go-ethereum-optimism/cmd/evm/internal/t8ntool"
+	"github.com/paxosglobal/go-ethereum-optimism/internal/debug"
+	"github.com/paxosglobal/go-ethereum-optimism/internal/flags"
 	"github.com/urfave/cli/v2"
 
 	// Force-load the tracer engines to trigger registration
-	_ "github.com/ethereum/go-ethereum/eth/tracers/js"
-	_ "github.com/ethereum/go-ethereum/eth/tracers/native"
+	_ "github.com/paxosglobal/go-ethereum-optimism/eth/tracers/js"
+	_ "github.com/paxosglobal/go-ethereum-optimism/eth/tracers/native"
 )
 
 var (

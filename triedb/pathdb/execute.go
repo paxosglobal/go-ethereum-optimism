@@ -20,12 +20,12 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
-	"github.com/ethereum/go-ethereum/trie/trienode"
-	"github.com/ethereum/go-ethereum/triedb/database"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
+	"github.com/paxosglobal/go-ethereum-optimism/trie"
+	"github.com/paxosglobal/go-ethereum-optimism/trie/trienode"
+	"github.com/paxosglobal/go-ethereum-optimism/triedb/database"
 )
 
 // context wraps all fields for executing state diffs.

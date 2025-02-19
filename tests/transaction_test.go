@@ -19,7 +19,7 @@ package tests
 import (
 	"testing"
 
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 func TestTransaction(t *testing.T) {
