@@ -19,6 +19,7 @@ package core
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"os"
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"

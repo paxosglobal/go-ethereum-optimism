@@ -24,6 +24,7 @@ import (
 	"math"
 	"math/big"
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/paxosglobal/go-ethereum-optimism/core/types"

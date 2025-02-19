@@ -17,6 +17,7 @@
 package vm
 
 import (
+	"math"
 	"testing"
 	"time"
 
@@ -43,12 +44,12 @@ func TestLoopInterrupt(t *testing.T) {
 	}
 
 	for i, tt := range loopInterruptTests {
-		statedb, _ := state.New(types.EmptyRootHash, state.NewDatabase(rawdb.NewMemoryDatabase()), nil)
+		statedb, _ := state.New(types.EmptyRootHash, state.NewDatabaseForTesting())
 		statedb.CreateAccount(address)
 		statedb.SetCode(address, common.Hex2Bytes(tt))
 		statedb.Finalise(true)
 
-		evm := NewEVM(vmctx, TxContext{}, statedb, params.AllEthashProtocolChanges, Config{})
+		evm := NewEVM(vmctx, statedb, params.AllEthashProtocolChanges, Config{})
 
 		errChannel := make(chan error)
 		timeout := make(chan bool)

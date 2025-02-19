@@ -20,7 +20,6 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 	"testing"
 
 	"github.com/cespare/cp"
@@ -113,7 +112,6 @@ func TestAccountImport(t *testing.T) {
 		},
 	}
 	for _, test := range tests {
-		test := test
 		t.Run(test.name, func(t *testing.T) {
 			t.Parallel()
 			importAccountWithExpect(t, test.key, test.output)
@@ -172,12 +170,12 @@ func TestAccountUpdate(t *testing.T) {
 		"f466859ead1932d743d622cb74fc058882e8648a")
 	defer geth.ExpectExit()
 	geth.Expect(`
-Unlocking account f466859ead1932d743d622cb74fc058882e8648a | Attempt 1/3
+Please give a NEW password. Do not forget this password.
 !! Unsupported terminal, password will be echoed.
-Password: {{.InputLine "foobar"}}
-Please give a new password. Do not forget this password.
 Password: {{.InputLine "foobar2"}}
 Repeat password: {{.InputLine "foobar2"}}
+Please provide the OLD password for account f466859ead1932d743d622cb74fc058882e8648a | Attempt 1/3
+Password: {{.InputLine "foobar"}}
 `)
 }
 

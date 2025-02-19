@@ -39,23 +39,14 @@ func NewApp(usage string) *cli.App {
 	git, _ := version.VCS()
 	app := cli.NewApp()
 	app.EnableBashCompletion = true
-	app.Version = params.VersionWithCommit(git.Commit, git.Date)
+	app.Version = version.WithCommit(git.Commit, git.Date)
 	app.Usage = usage
-	app.Copyright = "Copyright 2013-2024 The go-ethereum Authors"
+	app.Copyright = "Copyright 2013-2025 The go-ethereum Authors"
 	app.Before = func(ctx *cli.Context) error {
 		MigrateGlobalFlags(ctx)
 		return nil
 	}
 	return app
-}
-
-// Merge merges the given flag slices.
-func Merge(groups ...[]cli.Flag) []cli.Flag {
-	var ret []cli.Flag
-	for _, group := range groups {
-		ret = append(ret, group...)
-	}
-	return ret
 }
 
 var migrationApplied = map[*cli.Command]struct{}{}
@@ -115,7 +106,7 @@ func doMigrateFlags(ctx *cli.Context) {
 		for _, parent := range ctx.Lineage()[1:] {
 			if parent.IsSet(name) {
 				// When iterating across the lineage, we will be served both
-				// the 'canon' and alias formats of all commmands. In most cases,
+				// the 'canon' and alias formats of all commands. In most cases,
 				// it's fine to set it in the ctx multiple times (one for each
 				// name), however, the Slice-flags are not fine.
 				// The slice-flags accumulate, so if we set it once as
@@ -264,9 +255,6 @@ func AutoEnvVars(flags []cli.Flag, prefix string) {
 			flag.EnvVars = append(flag.EnvVars, envvar)
 
 		case *BigFlag:
-			flag.EnvVars = append(flag.EnvVars, envvar)
-
-		case *TextMarshalerFlag:
 			flag.EnvVars = append(flag.EnvVars, envvar)
 
 		case *DirectoryFlag:

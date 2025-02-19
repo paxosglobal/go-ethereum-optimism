@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strings"
 	"sync"
@@ -44,8 +45,7 @@ func byURL(a, b accounts.Account) int {
 	return a.URL.Cmp(b.URL)
 }
 
-// AmbiguousAddrError is returned when attempting to unlock
-// an address for which more than one file exists.
+// AmbiguousAddrError is returned when an address matches multiple files.
 type AmbiguousAddrError struct {
 	Addr    common.Address
 	Matches []accounts.Account

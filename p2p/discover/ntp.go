@@ -22,6 +22,7 @@ package discover
 import (
 	"fmt"
 	"net"
+	"slices"
 	"time"
 
 	"github.com/paxosglobal/go-ethereum-optimism/log"

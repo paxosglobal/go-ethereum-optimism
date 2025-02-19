@@ -57,6 +57,16 @@ type Header struct {
 	BodyRoot common.Hash `gencodec:"required" json:"body_root"`
 }
 
+func headerFromZRNT(zh *zrntcommon.BeaconBlockHeader) Header {
+	return Header{
+		Slot:          uint64(zh.Slot),
+		ProposerIndex: uint64(zh.ProposerIndex),
+		ParentRoot:    common.Hash(zh.ParentRoot),
+		StateRoot:     common.Hash(zh.StateRoot),
+		BodyRoot:      common.Hash(zh.BodyRoot),
+	}
+}
+
 // headerMarshaling is a field type overrides for gencodec.
 type headerMarshaling struct {
 	Slot          common.Decimal

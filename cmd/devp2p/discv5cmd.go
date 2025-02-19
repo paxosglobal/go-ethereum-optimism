@@ -19,6 +19,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/paxosglobal/go-ethereum-optimism/cmd/devp2p/internal/v5test"
@@ -56,7 +57,7 @@ var (
 		Name:   "crawl",
 		Usage:  "Updates a nodes.json file with random nodes found in the DHT",
 		Action: discv5Crawl,
-		Flags: flags.Merge(discoveryNodeFlags, []cli.Flag{
+		Flags: slices.Concat(discoveryNodeFlags, []cli.Flag{
 			crawlTimeoutFlag,
 		}),
 	}
