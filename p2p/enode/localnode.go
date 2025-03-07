@@ -26,9 +26,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/enr"
-	"github.com/ethereum/go-ethereum/p2p/netutil"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/enr"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/netutil"
 )
 
 const (

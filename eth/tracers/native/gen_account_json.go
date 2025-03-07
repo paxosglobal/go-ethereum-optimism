@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common/hexutil"
 )
 
 var _ = (*accountMarshaling)(nil)

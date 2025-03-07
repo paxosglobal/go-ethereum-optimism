@@ -24,11 +24,11 @@ import (
 	"os"
 	"slices"
 
-	"github.com/ethereum/go-ethereum/cmd/utils"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/log"
 	"github.com/ethereum/go-verkle"
+	"github.com/paxosglobal/go-ethereum-optimism/cmd/utils"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
 	"github.com/urfave/cli/v2"
 )
 

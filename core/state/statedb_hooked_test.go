@@ -21,10 +21,10 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/holiman/uint256"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/tracing"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
 )
 
 // This method tests that the 'burn' from sending-to-selfdestructed accounts

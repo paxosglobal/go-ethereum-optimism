@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/ethereum/go-ethereum/trie"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common/hexutil"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/rlp"
+	"github.com/paxosglobal/go-ethereum-optimism/trie"
 )
 
 // DumpConfig is a set of options to control what portions of the state will be

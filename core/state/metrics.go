@@ -16,7 +16,7 @@
 
 package state
 
-import "github.com/ethereum/go-ethereum/metrics"
+import "github.com/paxosglobal/go-ethereum-optimism/metrics"
 
 var (
 	accountReadMeters        = metrics.NewRegisteredMeter("state/read/accounts", nil)

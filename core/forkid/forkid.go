@@ -27,9 +27,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 var (

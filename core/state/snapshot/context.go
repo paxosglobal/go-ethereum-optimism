@@ -23,11 +23,11 @@ import (
 	"math"
 	"time"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/ethdb/memorydb"
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
+	"github.com/paxosglobal/go-ethereum-optimism/ethdb"
+	"github.com/paxosglobal/go-ethereum-optimism/ethdb/memorydb"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
 )
 
 const (

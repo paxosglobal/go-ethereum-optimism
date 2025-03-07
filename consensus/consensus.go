@@ -20,12 +20,12 @@ package consensus
 import (
 	"math/big"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/vm"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/rpc"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/state"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/core/vm"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
+	"github.com/paxosglobal/go-ethereum-optimism/rpc"
 )
 
 // ChainHeaderReader defines a small collection of methods needed to access the local

@@ -7,10 +7,10 @@ import (
 	"net"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/core/types/interoptypes"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types/interoptypes"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 	"github.com/stretchr/testify/require"
 )
 

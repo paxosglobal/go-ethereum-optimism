@@ -17,12 +17,12 @@
 package trie
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/trie/trienode"
-	"github.com/ethereum/go-ethereum/triedb/database"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/ethdb"
+	"github.com/paxosglobal/go-ethereum-optimism/trie/trienode"
+	"github.com/paxosglobal/go-ethereum-optimism/triedb/database"
 )
 
 // testReader implements database.Reader interface, providing function to

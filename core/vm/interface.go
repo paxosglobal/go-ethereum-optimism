@@ -17,14 +17,14 @@
 package vm
 
 import (
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/state"
-	"github.com/ethereum/go-ethereum/core/stateless"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
-	"github.com/ethereum/go-ethereum/trie/utils"
 	"github.com/holiman/uint256"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core/state"
+	"github.com/paxosglobal/go-ethereum-optimism/core/stateless"
+	"github.com/paxosglobal/go-ethereum-optimism/core/tracing"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
+	"github.com/paxosglobal/go-ethereum-optimism/trie/utils"
 )
 
 // StateDB is an EVM database for full state querying.

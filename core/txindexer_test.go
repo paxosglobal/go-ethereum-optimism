@@ -20,13 +20,13 @@ import (
 	"math/big"
 	"testing"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/consensus/ethash"
-	"github.com/ethereum/go-ethereum/core/rawdb"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/ethereum/go-ethereum/ethdb"
-	"github.com/ethereum/go-ethereum/params"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/consensus/ethash"
+	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto"
+	"github.com/paxosglobal/go-ethereum-optimism/ethdb"
+	"github.com/paxosglobal/go-ethereum-optimism/params"
 )
 
 // TestTxIndexer tests the functionalities for managing transaction indexes.

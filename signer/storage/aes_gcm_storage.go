@@ -24,7 +24,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/ethereum/go-ethereum/log"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
 )
 
 type storedCredential struct {

@@ -5,10 +5,10 @@ package p2p
 import (
 	"crypto/ecdsa"
 
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/p2p/enode"
-	"github.com/ethereum/go-ethereum/p2p/nat"
-	"github.com/ethereum/go-ethereum/p2p/netutil"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/enode"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/nat"
+	"github.com/paxosglobal/go-ethereum-optimism/p2p/netutil"
 )
 
 var _ = (*configMarshaling)(nil)

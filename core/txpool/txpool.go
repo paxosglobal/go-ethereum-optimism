@@ -23,13 +23,13 @@ import (
 	"math/big"
 	"sync"
 
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto/kzg4844"
-	"github.com/ethereum/go-ethereum/event"
-	"github.com/ethereum/go-ethereum/log"
-	"github.com/ethereum/go-ethereum/metrics"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
+	"github.com/paxosglobal/go-ethereum-optimism/core"
+	"github.com/paxosglobal/go-ethereum-optimism/core/types"
+	"github.com/paxosglobal/go-ethereum-optimism/crypto/kzg4844"
+	"github.com/paxosglobal/go-ethereum-optimism/event"
+	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"github.com/paxosglobal/go-ethereum-optimism/metrics"
 )
 
 type L1CostFunc func(dataGas types.RollupCostData) *big.Int
