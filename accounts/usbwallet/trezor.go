@@ -27,13 +27,13 @@ import (
 	"io"
 	"math/big"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/paxosglobal/go-ethereum-optimism/accounts"
 	"github.com/paxosglobal/go-ethereum-optimism/accounts/usbwallet/trezor"
 	"github.com/paxosglobal/go-ethereum-optimism/common"
 	"github.com/paxosglobal/go-ethereum-optimism/common/hexutil"
 	"github.com/paxosglobal/go-ethereum-optimism/core/types"
 	"github.com/paxosglobal/go-ethereum-optimism/log"
+	"google.golang.org/protobuf/proto"
 )
 
 // ErrTrezorPINNeeded is returned if opening the trezor requires a PIN code. In

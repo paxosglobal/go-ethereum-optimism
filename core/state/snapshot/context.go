@@ -20,10 +20,10 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"math"
 	"time"
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"
-	"github.com/paxosglobal/go-ethereum-optimism/common/math"
 	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
 	"github.com/paxosglobal/go-ethereum-optimism/ethdb"
 	"github.com/paxosglobal/go-ethereum-optimism/ethdb/memorydb"
@@ -46,7 +46,7 @@ type generatorStats struct {
 	storage  common.StorageSize // Total account and storage slot size(generation or recovery)
 }
 
-// Log creates an contextual log with the given message and the context pulled
+// Log creates a contextual log with the given message and the context pulled
 // from the internally maintained statistics.
 func (gs *generatorStats) Log(msg string, root common.Hash, marker []byte) {
 	var ctx []interface{}

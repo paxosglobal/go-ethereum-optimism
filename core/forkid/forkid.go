@@ -24,12 +24,12 @@ import (
 	"math"
 	"math/big"
 	"reflect"
+	"slices"
 	"strings"
 
 	"github.com/paxosglobal/go-ethereum-optimism/core/types"
 	"github.com/paxosglobal/go-ethereum-optimism/log"
 	"github.com/paxosglobal/go-ethereum-optimism/params"
-	"golang.org/x/exp/slices"
 )
 
 var (

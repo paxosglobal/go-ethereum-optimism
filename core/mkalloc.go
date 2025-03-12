@@ -30,12 +30,12 @@ import (
 	"fmt"
 	"math/big"
 	"os"
+	"slices"
 	"strconv"
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"
 	"github.com/paxosglobal/go-ethereum-optimism/core"
 	"github.com/paxosglobal/go-ethereum-optimism/rlp"
-	"golang.org/x/exp/slices"
 )
 
 type allocItem struct {
@@ -101,6 +101,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	defer file.Close()
 	if err := json.NewDecoder(file).Decode(g); err != nil {
 		panic(err)
 	}
