@@ -19,6 +19,7 @@ package core
 import (
 	"context"
 	"encoding/json"
+	"log/slog"
 	"os"
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"
@@ -26,7 +27,6 @@ import (
 	"github.com/paxosglobal/go-ethereum-optimism/internal/ethapi"
 	"github.com/paxosglobal/go-ethereum-optimism/log"
 	"github.com/paxosglobal/go-ethereum-optimism/signer/core/apitypes"
-	"golang.org/x/exp/slog"
 )
 
 type AuditLogger struct {

@@ -21,12 +21,13 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io"
+	"slices"
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"
 	"github.com/paxosglobal/go-ethereum-optimism/core/rawdb"
 	"github.com/paxosglobal/go-ethereum-optimism/ethdb/memorydb"
 	"github.com/paxosglobal/go-ethereum-optimism/trie"
-	"golang.org/x/exp/slices"
+	"github.com/paxosglobal/go-ethereum-optimism/triedb"
 )
 
 type kv struct {
@@ -56,7 +57,7 @@ func (f *fuzzer) readInt() uint64 {
 }
 
 func (f *fuzzer) randomTrie(n int) (*trie.Trie, map[string]*kv) {
-	trie := trie.NewEmpty(trie.NewDatabase(rawdb.NewMemoryDatabase(), nil))
+	trie := trie.NewEmpty(triedb.NewDatabase(rawdb.NewMemoryDatabase(), nil))
 	vals := make(map[string]*kv)
 	size := f.readInt()
 	// Fill it with some fluff

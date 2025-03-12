@@ -22,7 +22,7 @@ import (
 
 	"github.com/paxosglobal/go-ethereum-optimism/common"
 	"github.com/paxosglobal/go-ethereum-optimism/eth"
-	"github.com/paxosglobal/go-ethereum-optimism/eth/downloader"
+	"github.com/paxosglobal/go-ethereum-optimism/eth/ethconfig"
 	"github.com/paxosglobal/go-ethereum-optimism/log"
 	"github.com/paxosglobal/go-ethereum-optimism/node"
 )
@@ -62,7 +62,7 @@ func (tester *FullSyncTester) Start() error {
 
 		// Trigger beacon sync with the provided block hash as trusted
 		// chain head.
-		err := tester.backend.Downloader().BeaconDevSync(downloader.FullSync, tester.target, tester.closed)
+		err := tester.backend.Downloader().BeaconDevSync(ethconfig.FullSync, tester.target, tester.closed)
 		if err != nil {
 			log.Info("Failed to trigger beacon sync", "err", err)
 		}
