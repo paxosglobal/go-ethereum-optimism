@@ -1,7 +1,7 @@
 package superchain
 
 import (
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
 )
 
 type ChainConfig struct {

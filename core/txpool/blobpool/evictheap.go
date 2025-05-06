@@ -21,8 +21,8 @@ import (
 	"math"
 	"slices"
 
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/holiman/uint256"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
 	"golang.org/x/exp/maps"
 )
 

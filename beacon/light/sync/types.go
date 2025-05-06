@@ -17,9 +17,9 @@
 package sync
 
 import (
-	"github.com/ethereum/go-ethereum/beacon/light/request"
-	"github.com/ethereum/go-ethereum/beacon/types"
-	"github.com/ethereum/go-ethereum/common"
+	"github.com/paxosglobal/go-ethereum-optimism/beacon/light/request"
+	"github.com/paxosglobal/go-ethereum-optimism/beacon/types"
+	"github.com/paxosglobal/go-ethereum-optimism/common"
 )
 
 var (
