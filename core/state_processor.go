@@ -104,9 +104,12 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		receipts = append(receipts, receipt)
 		allLogs = append(allLogs, receipt.Logs...)
 	}
+
+	isIsthmus := p.config.IsIsthmus(block.Time())
+
 	// Read requests if Prague is enabled.
 	var requests [][]byte
-	if p.config.IsPrague(block.Number(), block.Time()) {
+	if p.config.IsPrague(block.Number(), block.Time()) && !isIsthmus {
 		requests = [][]byte{}
 		// EIP-6110
 		if err := ParseDepositLogs(&requests, allLogs, p.config); err != nil {
@@ -118,7 +121,7 @@ func (p *StateProcessor) Process(block *types.Block, statedb *state.StateDB, cfg
 		ProcessConsolidationQueue(&requests, evm)
 	}
 
-	if p.config.IsIsthmus(block.Time()) {
+	if isIsthmus {
 		requests = [][]byte{}
 	}
 
@@ -222,20 +225,9 @@ func MakeReceipt(evm *vm.EVM, result *ExecutionResult, statedb *state.StateDB, b
 // for the transaction, gas used and an error if the transaction failed,
 // indicating the block was invalid.
 func ApplyTransaction(evm *vm.EVM, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64) (*types.Receipt, error) {
-	return ApplyTransactionExtended(evm, gp, statedb, header, tx, usedGas, nil)
-}
-
-type ApplyTransactionOpts struct {
-	PostValidation func(evm *vm.EVM, result *ExecutionResult) error
-}
-
-func ApplyTransactionExtended(evm *vm.EVM, gp *GasPool, statedb *state.StateDB, header *types.Header, tx *types.Transaction, usedGas *uint64, extraOpts *ApplyTransactionOpts) (*types.Receipt, error) {
 	msg, err := TransactionToMessage(tx, types.MakeSigner(evm.ChainConfig(), header.Number, header.Time), header.BaseFee)
 	if err != nil {
 		return nil, err
-	}
-	if extraOpts != nil {
-		msg.PostValidation = extraOpts.PostValidation
 	}
 	// Create a new context to be used in the EVM environment
 	return ApplyTransactionWithEVM(msg, gp, statedb, header.Number, header.Hash(), tx, usedGas, evm)
